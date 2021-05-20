@@ -1,5 +1,5 @@
 # Graph QL
-* Use Mongo DB, TypeScript and Grapg QL
+* Use Mongo DB, TypeScript and Graph QL
 
 ## Install and start
 * Install: npm install 
