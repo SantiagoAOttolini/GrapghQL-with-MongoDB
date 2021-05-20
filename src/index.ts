@@ -20,5 +20,5 @@ const server = new ApolloServer({
 server.applyMiddleware({ app });
 
 app.listen(config.port, () => {
-  console.log(`http://localhost:${config.port}`);
+  console.log(`http://localhost:${config.port}/graphql`);
 });
