@@ -7,7 +7,7 @@ import {
 
 export const gameResolver: IResolvers = {
   Query: {
-    async gameGame(root: void, args: any, context: Db) {
+    async getGame(root: void, args: any, context: Db) {
       try {
         return await context.collection(GAME_COLLECTION).find().toArray();
       } catch (error) {

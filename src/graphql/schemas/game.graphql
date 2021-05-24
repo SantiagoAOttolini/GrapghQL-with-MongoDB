@@ -1,5 +1,5 @@
 type Query {
-    gameGame: [Game]
+    getGame: [Game]
 }
 
 type Mutation {

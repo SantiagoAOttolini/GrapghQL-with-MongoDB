@@ -1,7 +1,7 @@
 import { IResolvers } from "graphql-tools";
 import data from "../../data/data.json";
 import { Db, ObjectId } from "mongodb";
-import { CHARACTER_COLLECTION } from "../../mongo/collections";
+import { CHARACTER_COLLECTION, GAME_COLLECTION } from "../../mongo/collections";
 
 export const characterResolver: IResolvers = {
   Query: {
@@ -29,13 +29,33 @@ export const characterResolver: IResolvers = {
         console.log(error);
       }
     },
+    async editCharacter(root: void, args: any, context: Db) {
+      try {
+        const exist = await context
+          .collection(CHARACTER_COLLECTION)
+          .findOne({ _id: new ObjectId(args._id) });
+
+        if (exist) {
+          await context
+            .collection(CHARACTER_COLLECTION)
+            .updateOne(
+              { _id: new ObjectId(args._id) },
+              { $set: args.character }
+            );
+
+            return "Character updated successfully";
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
   Character: {
     async games(parent: any, args: void, context: Db) {
       const gameList = parent.games.map(
         async (gameId: string) =>
           await context
-            .collection(CHARACTER_COLLECTION)
+            .collection(GAME_COLLECTION)
             .findOne({ _id: new ObjectId(gameId) })
       );
 
