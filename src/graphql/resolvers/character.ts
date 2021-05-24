@@ -1,7 +1,7 @@
 import { IResolvers } from "graphql-tools";
 import data from "../../data/data.json";
-import { Db } from "mongodb";
-import {CHARACTER_COLLECTION} from '../../mongo/collections'
+import { Db, ObjectId } from "mongodb";
+import { CHARACTER_COLLECTION } from "../../mongo/collections";
 
 export const characterResolver: IResolvers = {
   Query: {
@@ -20,20 +20,25 @@ export const characterResolver: IResolvers = {
   Mutation: {
     async createCharacter(root: void, args: any, context: Db) {
       try {
-        await context.collection(CHARACTER_COLLECTION).insertOne(args.character)
+        await context
+          .collection(CHARACTER_COLLECTION)
+          .insertOne(args.character);
         data.characters.push(args.character);
         return "Character added successfully";
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     },
   },
   Character: {
-    games(root: any) {
-      const gameList: Array<any> = [];
-      root.games.map((gameId: string) =>
-        gameList.push(...data.games.filter((game) => game._id === gameId))
+    async games(parent: any, args: void, context: Db) {
+      const gameList = parent.games.map(
+        async (gameId: string) =>
+          await context
+            .collection(CHARACTER_COLLECTION)
+            .findOne({ _id: new ObjectId(gameId) })
       );
+
       return gameList;
     },
   },
