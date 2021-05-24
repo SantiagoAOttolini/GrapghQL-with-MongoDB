@@ -1,12 +1,13 @@
 import { IResolvers } from "graphql-tools";
 import data from "../../data/data.json";
 import { Db } from "mongodb";
+import {CHARACTER_COLLECTION} from '../../mongo/collections'
 
 export const characterResolver: IResolvers = {
   Query: {
     async getCharacters(root: void, args: void, context: Db) {
       try {
-        return await context.collection("characters").find().toArray();
+        return await context.collection(CHARACTER_COLLECTION).find().toArray();
       } catch (error) {
         console.log(error);
       }
@@ -19,14 +20,12 @@ export const characterResolver: IResolvers = {
   Mutation: {
     async createCharacter(root: void, args: any, context: Db) {
       try {
-        await context.collection("characters").insertOne(args.character)
+        await context.collection(CHARACTER_COLLECTION).insertOne(args.character)
         data.characters.push(args.character);
         return "Character added successfully";
       } catch (error) {
         console.log(error)
       }
-
-
     },
   },
   Character: {
